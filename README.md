@@ -1,0 +1,2 @@
+# latex
+Studoši LaTeX resources
