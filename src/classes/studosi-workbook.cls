@@ -35,7 +35,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{studosi-workbook}[A LaTeX document class for workbooks]
 
-\PassOptionsToClass{10pt,a4paper,twoside,openright}{book}
+\PassOptionsToClass{12pt,a4paper,twoside,openany}{book}
 \ProcessOptions\relax
 
 \LoadClass{book}
@@ -61,8 +61,15 @@
 \definecolor{antistudosicolor}{HTML}{AD4347}
 \definecolor{urlcolor}{HTML}{A943AD}
 \definecolor{tagcolor}{HTML}{286765}
+\definecolor{codebgcolor}{HTML}{E3E3E3}
+
+\newcounter{tasknum}[chapter]
+\newcounter{answernum}[tasknum]
+\setcounter{tasknum}{0}
 
 \newcommand{\studosititle}{\large{\textsc{Studoši}}}
+
+\setlength\parindent{0pt}
 \newlength{\studosititlewidth}
 \setlength{\studosititlewidth}{\widthof{\studosititle}}
 \addtolength{\studosititlewidth}{+25pt}
@@ -90,14 +97,113 @@
     \restoregeometry
 }
 
-\AtBeginDocument{%
-\hypersetup{
-    linkcolor=studosicolor,
-    linkbordercolor=studosicolor,
-    citecolor=citecolor,
-    citebordercolor=citecolor,
-    filecolor=filecolor,
-    urlcolor=urlcolor,
-    urlbordercolor=urlcolor
+% For anyone wondering why this is implemented in such a braindead way:
+% alignment gets all fucky if I try to simulate a stack program.
+\NewDocumentCommand{\recordpoints}{m m m}{%
+    \IfNoValueTF{#3}{
+        \IfNoValueTF{#2}{
+            \IfNoValueTF{#1}{}{%
+                (\textcolor{studosicolor}{#1})
+            }
+        }{%
+            (\textcolor{studosicolor}{#1} \hspace{0.1cm}
+             \textcolor{antistudosicolor}{#2})
+        }
+    }{%
+        (\textcolor{studosicolor}{#1} \hspace{0.2cm}
+         \textcolor{gray}{#2} \hspace{0.2cm}
+         \textcolor{antistudosicolor}{#3})
     }
+}
+
+\NewDocumentCommand{\recordtag}{m}{%
+    \IfNoValueTF{#1}{}{#1 \space}
+}
+
+\NewDocumentCommand{\recordauthors}{m}{%
+	\IfNoValueTF{#1}{}{#1 \space}
+}
+
+% Arguments are points in (), tags in []
+\NewDocumentEnvironment{zadatak}{>{\SplitArgument{2}{;}}d() >{\SplitList{,}}d[]}{%
+    \refstepcounter{tasknum}
+    \vspace*{10pt}
+    \begin{flushleft}
+        \Large{%
+            \textsc{Zadatak \thechapter.\thetasknum} \space \IfNoValueTF{#1}{}{%
+                \mbox{\normalsize \textbf{\recordpoints #1}}
+            }
+        } \\
+        \small{%
+            \IfNoValueTF{#2}{}{%
+                \mbox{%
+                    \textsc{ključne riječi:} \hspace{15pt} \textcolor{tagcolor}{%
+                        \textbf{\ProcessList{#2}{\recordtag}}
+                    }
+                }
+            }
+        }
+        \vspace{5pt}
+    \end{flushleft}
+} {%
+    \vspace*{10pt}
+}
+
+\NewDocumentCommand{\komentar}{d[] m}{%
+	\begin{flushleft}
+		\footnotesize{%
+			\IfNoValueTF{#2}{%
+				\textit{prazan komentar}
+			}{%
+				\textbf{%
+					\IfNoValueTF{#1}{%
+						Komentar:
+					}{%
+						\textcolor{studosicolor}{#1} komentira:
+					}%
+				} \textit{#2}
+			}
+		}
+	\end{flushleft}
+}
+
+% Arguments are a single () argument for points, and authors in []
+\NewDocumentEnvironment{odgovor}{d() >{\SplitList{,}}d[]}{%
+    \refstepcounter{answernum}
+    \vspace*{10pt}
+    \begin{flushleft}
+        \large
+        \textsc{%
+        	Odgovor {\theanswernum} na zadatak \thechapter.\thetasknum%
+        } \hspace{20pt} \IfNoValueTF{#1}{}{%
+            \hfill \mbox{%
+                \normalsize{\textsc{bodovi:} \textbf{\textcolor{studosicolor}{#1}}}
+            }
+        } \\
+    \small{%
+    	\IfNoValueTF{#2}{}{%
+    		\mbox{%
+    			\textsc{priložili:} \hspace{15pt} \textcolor{tagcolor}{%
+    				\textbf{\ProcessList{#2}{\recordauthors}}
+    			}
+    		}
+    	}
+    }
+    \vspace{5pt}
+    \end{flushleft}
+}{%
+}
+
+\AtBeginDocument{%
+    \hypersetup{
+        linkcolor=studosicolor,
+        linkbordercolor=studosicolor,
+        citecolor=citecolor,
+        citebordercolor=citecolor,
+        filecolor=filecolor,
+        urlcolor=urlcolor,
+        urlbordercolor=urlcolor
+    }
+
+    \newminted[kod]{text}{bgcolor=codebgcolor,baselinestretch=1.2,tabsize=4,fontsize=\small,breaklines,autogobble}
 }

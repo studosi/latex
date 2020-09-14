@@ -35,6 +35,197 @@
 \documentclass{studosi-workbook}
 
 \begin{document}
-    \title{Naziv predmeta}
+    \title{Prezentacija \LaTeX \space predloška}
     \maketitle
+
+
+
+    \tableofcontents
+
+
+
+    \chapter{Uvod}\label{ch:uvod}
+    Ovaj dokument služi kao primjer zbirke zadataka. Svaki put kad se doda nova
+    funkcionalnost, bit će pokazana u ovom dokumentu.
+
+
+    \chapter{Korištenje}\label{ch:koristenje}
+    U ovom poglavlju obradit ćemo sve stavke korištenja ove klase dokumenta \\
+    (\texttt{studosi-workbook}). Ovaj dokument ne pokriva apsolutno sve što je potrebno
+    kako bi se pisali kvalitetni dokumenti (kao npr. korištenje \textit{tikz} paketa),
+    već se prezentira funkcionalnost specifična za ovu klasu dokumenta.
+
+
+    \section{Dodavanje zadataka}\label{ch:dodavanje-zadataka}
+    Dodavanje zadataka vrši se relativno jednostavno uz okruženje \texttt{zadatak}. Zadatci imaju vlastiti brojač koji nova poglavlja resetiraju na 1. Prvi broj zadatka je uvijek broj poglavlja, s obzirom na to da su zadatci separirani poglavljima. Ako neki zadatak ima gradivo koje je iz nekoliko poglavlja, svrstava se u \textbf{ranije} poglavlje. \\
+    
+    Okruženje ima 2 vrste argumenta: bodovanje: označeno sa zagradama, lista odvojena točkom-zarez) te ključne riječi: označene s uglatim zagradama, odvojene zarezima. Primjer jednog takvog okruženja je sljedeće:
+
+    \begin{kod}
+    \begin{zadatak}(4;0;2)[ključna riječ 1,neka druga KR,nešto]
+        Neki zadatak
+    \end{zadatak}
+    \end{kod}
+
+    što će rezultirati
+
+    \begin{zadatak}(4;0;2)[ključna riječ 1,neka druga KR,nešto]
+        Neki zadatak
+    \end{zadatak}
+    \vspace*{20pt}
+
+    Nije nužno zadati sve bodove: ako su zadana samo 2 argumenta za bodove, oni će se
+    automatski shvatiti kao pozitivni i negativni bodovi. Primjer toga je sljedeće:
+    
+    \begin{kod}
+   	\begin{zadatak}(4;2)[ključna riječ 1,neka druga KR,nešto]
+   		Neki zadatak gdje nema neutralnih bodova
+   	\end{zadatak}
+    \end{kod}
+    
+    što će rezultirati
+    
+    \begin{zadatak}(4;2)[ključna riječ 1,neka druga KR,nešto]
+    	Neki zadatak gdje nema neutralnih bodova
+    \end{zadatak}
+	\vspace*{20pt}
+    
+    Ako se zada samo jedan argument za bodove, to će se shvatiti kao pozitivni bodovi. Na primjer,
+    
+    \begin{kod}
+   	\begin{zadatak}(4)[zaokruživanje valjda]
+   		Nema negativnih!
+   	\end{zadatak}
+    \end{kod}
+    
+    će rezultirati
+    
+    \begin{zadatak}(4)[zaokruživanje valjda]
+    	Nema negativnih!
+    \end{zadatak}
+	\vspace*{20pt}
+    
+    
+    Ako je u pitanju neki drugi slučaj, to onda ne bi trebalo zabilježiti formalno, već
+    komentirati na početku zadatka taj poseban slučaj. Recimo da su poznati pozitivni i neutralni bodovi - zapisati treba pozitivne, a neutralne samo komentirati. Komentiranje ćemo pokriti u sljedećem dijelu. \\
+
+    Što se tiče ključnih riječi, njihova uloga je olakšano praćenje sadržaja zadataka -
+    kako je nemoguće sortirati sve zadatke, rješenje za to su ključne riječi koje je
+    moguće indeksirati abecedno. One nemaju maksimalan broj argumenata, ali dobra
+    praksa je ograničiti se na 3-4 ključne riječi kako bi ostale relevantne. Ako se
+    radi o nekom ogromnom zadatku, naravno, može se koristiti i više ključnih riječi. Bilo bi dobro da se u ključne riječi \textbf{ne stavljaju} tipovi zadataka (npr. zaokruživanje, nadopunjavanje, postupak itd.) jer će to rezultirati s indeksiranom oznakom s puno pridruženih stranica. Ključne riječi služe za lakšu navigaciju po gradivu, ne po tipu zadatka. \\
+    
+    Naravno, ključne riječi nisu obavezni argumenti. Nisu ni bodovi. Zadatci bez ijednog i drugog mogu se ilustrirati s
+    
+    \begin{kod}
+   	\begin{zadatak}
+   		Zadatak bez ičega!
+   	\end{zadatak}
+    \end{kod}
+    
+    što daje
+    
+    \begin{zadatak}
+    	Zadatak bez ičega!
+    \end{zadatak}
+    \vspace*{20pt}
+    
+    Ovako nešto je korisno za zadatke studenata ili općenito: zadatke koji nisu iz nekog ispita.
+    
+    \section{Dodavanje komentara}
+    Komentari se lako mogu dodati uz naredbu \texttt{komentar}. Naredba ima 2 argumenta: sadržaj komentara, koji je obavezan argument, te ime autora, neobavezan argument. Ime autora može biti korisničko ime na forumu ili pravo ime, što god autor više preferira. Primjer jednog takvog komentara je sljedeće:
+    
+    \begin{kod}
+   	\komentar[Mićo]{%
+   		Komentari su super za zadatke, ali slobodno ih koristite gdje god su smisleni.
+   	}
+    \end{kod}
+
+	što će rezultirati:
+	
+	\komentar[Mićo]{%
+		Komentari su super za zadatke, ali slobodno ih koristite gdje god su smisleni.
+	}
+
+	\vspace*{8pt}
+
+	Komentari bez autora mogu se definirati izostavljajući argument u uglatim zagradama. Na primjer,
+	
+	\begin{kod}
+	\komentar{%
+		Ne volim Bažanta jer me srušio iako nisam ništa znao.
+	}
+	\end{kod}
+
+	će rezultirati
+	
+	\komentar{%
+		Ne volim Bažanta jer me srušio iako nisam ništa znao.
+	}
+
+	\vspace*{8pt}
+
+	Komentari bez sadržaja nisu dozvoljeni (jer je sadržaj komentara obavezan argument), pa tako se
+	
+	\begin{kod}
+	\komentar
+	\end{kod}
+
+	neće kompajlirati.
+	
+	
+	\section{Dodavanje odgovora}
+	Dodavanje odgovora isto je relativno jednostavno; odgovori se dodaju koristeći okruženje \texttt{odgovor}. Odgovori imaju 1 neobavezni argument u zagradama, dobivene bodove, te neobaveznu listu argumenata u uglatim zagradama razdvojenu zarezima, autore. Na primjer,
+	
+	\begin{kod}
+	\begin{odgovor}(10)[Mićo,HeHe]
+		Odgovor na neko pitanje
+	\end{odgovor}
+	\end{kod}
+
+	rezultirat će
+	
+	\begin{odgovor}(10)[Mićo,HeHe]
+		Odgovor na neko pitanje
+	\end{odgovor}
+
+	\vspace{25pt}
+	
+	Odgovori uz sebe, kao i zadatak, imaju brojač. Taj brojač resetira novi zadatak, tj. odgovori su vezani uz zadatke, no odgovori ne moraju biti unutar okruženja zadataka (kao što je i demonstrirano iznad). Odgovori u naslovu elementa govore i na koji zadatak odgovaraju. U principu je to posljednji zadatak koji je referenciran. \\
+	
+	Bez predanog argumenta za bodove, ništa se neće ispisati u gornjem desnom uglu:
+	
+	\begin{kod}
+	\begin{odgovor}[Mićo,HeHe]
+		Odgovor na neko pitanje, ali nije bilo na ispitu pa se ne zna koliko bodova nosi
+	\end{odgovor}
+	\end{kod}
+	
+	rezultirat će
+	
+	\begin{odgovor}[Mićo,HeHe]
+		Odgovor na neko pitanje, ali nije bilo na ispitu pa se ne zna koliko bodova nosi
+	\end{odgovor}
+	\vspace*{25pt}
+	
+	Konačno, kako ni lista autora nije obavezna, moguće je predati odgovor i bez nje:
+	
+	\begin{kod}
+	\begin{odgovor}
+		Ovaj odgovor je anoniman!
+	\end{odgovor}
+	\end{kod}
+	
+	rezultirat će
+	
+	\begin{odgovor}
+		Ovaj odgovor je anoniman!
+	\end{odgovor}
+
+	\vspace*{15pt}
+
+
+	\section{Napredna funkcionalnost}
+	
+	
 \end{document}
