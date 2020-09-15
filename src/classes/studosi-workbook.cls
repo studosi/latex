@@ -35,7 +35,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{studosi-workbook}[A LaTeX document class for workbooks]
 
-\PassOptionsToClass{12pt,a4paper,twoside,openany}{book}
+\PassOptionsToClass{12 pt,a4paper,twoside,openany}{book}
 \ProcessOptions\relax
 
 \LoadClass{book}
@@ -46,12 +46,14 @@
 \RequirePackage{amsmath}
 \RequirePackage{calc}
 \RequirePackage[croatian]{babel}
+\RequirePackage{enumitem}
 \RequirePackage{geometry}
 \RequirePackage{graphicx}
 \RequirePackage[hyperref]{xcolor}
 \RequirePackage{hyperref}
 \RequirePackage[framemethod=tikz]{mdframed}
 \RequirePackage{minted}
+\RequirePackage{tcolorbox}
 \RequirePackage{tikz}
 \RequirePackage{xparse}
 
@@ -62,17 +64,33 @@
 \definecolor{urlcolor}{HTML}{A943AD}
 \definecolor{tagcolor}{HTML}{286765}
 \definecolor{codebgcolor}{HTML}{E3E3E3}
+\definecolor{nadopunabgcolor}{HTML}{E3E3E3}
 
 \newcounter{tasknum}[chapter]
 \newcounter{answernum}[tasknum]
 \setcounter{tasknum}{0}
 
 \newcommand{\studosititle}{\large{\textsc{Studoši}}}
+\newcommand{\nadopunawidth}{20 pt}
 
-\setlength\parindent{0pt}
+\newtcbox{\nadopunabox}{%
+	on line,%
+	box align=base,%
+	colframe=white,%
+	colback=nadopunabgcolor,%
+	boxrule=0.1 pt,%
+	arc=1 pt,%
+	boxsep=0 pt,%
+	left=6 pt,%
+	right=6 pt,%
+	top=12 pt,%
+	bottom=3 pt%
+}
+
+\setlength\parindent{0 pt}
 \newlength{\studosititlewidth}
 \setlength{\studosititlewidth}{\widthof{\studosititle}}
-\addtolength{\studosititlewidth}{+25pt}
+\addtolength{\studosititlewidth}{+25 pt}
 
 \renewcommand{\maketitle}{%
     \newgeometry{centering}
@@ -81,9 +99,9 @@
             \vspace*{\fill}
 
             \studosititle \\
-            \vspace*{-8pt}
-            \centerline{\rule{\studosititlewidth}{0.2pt}}
-            \vspace*{20pt}
+            \vspace*{-8 pt}
+            \centerline{\rule{\studosititlewidth}{0.2 pt}}
+            \vspace*{20 pt}
 
             \huge{\textbf{\textsc{\@title}}}
 
@@ -127,7 +145,7 @@
 % Arguments are points in (), tags in []
 \NewDocumentEnvironment{zadatak}{>{\SplitArgument{2}{;}}d() >{\SplitList{,}}d[]}{%
     \refstepcounter{tasknum}
-    \vspace*{10pt}
+    \vspace*{10 pt}
     \begin{flushleft}
         \Large{%
             \textsc{Zadatak \thechapter.\thetasknum} \space \IfNoValueTF{#1}{}{%
@@ -137,16 +155,31 @@
         \small{%
             \IfNoValueTF{#2}{}{%
                 \mbox{%
-                    \textsc{ključne riječi:} \hspace{15pt} \textcolor{tagcolor}{%
+                    \textsc{ključne riječi:} \hspace{15 pt} \textcolor{tagcolor}{%
                         \textbf{\ProcessList{#2}{\recordtag}}
                     }
                 }
             }
         }
-        \vspace{5pt}
+        \vspace{5 pt}
     \end{flushleft}
 } {%
-    \vspace*{10pt}
+    \vspace*{10 pt}
+}
+
+\NewDocumentCommand{\ponuda}{s m}{%
+	\item{\IfBooleanTF{#1}{\textbf{#2}}{#2}}
+}
+
+% Arguments are not parsed because zadatak parses them!
+\NewDocumentEnvironment{zaokruzivanje}{d() d[]}{%
+	\begin{enumerate}[label=\alph*), itemsep=0 pt]
+}{%
+	\end{enumerate}
+}
+
+\NewDocumentCommand{\nadopuna}{d()}{%
+	\nadopunabox{\hspace*{\IfNoValueTF{#1}{\nadopunawidth}{#1}}}
 }
 
 \NewDocumentCommand{\komentar}{d[] m}{%
@@ -159,7 +192,7 @@
 					\IfNoValueTF{#1}{%
 						Komentar:
 					}{%
-						\textcolor{studosicolor}{#1} komentira:
+						\textcolor{tagcolor}{#1} komentira:
 					}%
 				} \textit{#2}
 			}
@@ -170,12 +203,12 @@
 % Arguments are a single () argument for points, and authors in []
 \NewDocumentEnvironment{odgovor}{d() >{\SplitList{,}}d[]}{%
     \refstepcounter{answernum}
-    \vspace*{10pt}
+    \vspace*{10 pt}
     \begin{flushleft}
         \large
         \textsc{%
         	Odgovor {\theanswernum} na zadatak \thechapter.\thetasknum%
-        } \hspace{20pt} \IfNoValueTF{#1}{}{%
+        } \hspace{20 pt} \IfNoValueTF{#1}{}{%
             \hfill \mbox{%
                 \normalsize{\textsc{bodovi:} \textbf{\textcolor{studosicolor}{#1}}}
             }
@@ -183,13 +216,13 @@
     \small{%
     	\IfNoValueTF{#2}{}{%
     		\mbox{%
-    			\textsc{priložili:} \hspace{15pt} \textcolor{tagcolor}{%
+    			\textsc{priložili:} \hspace{15 pt} \textcolor{tagcolor}{%
     				\textbf{\ProcessList{#2}{\recordauthors}}
     			}
     		}
     	}
     }
-    \vspace{5pt}
+    \vspace{5 pt}
     \end{flushleft}
 }{%
 }

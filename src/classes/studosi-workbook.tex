@@ -226,6 +226,97 @@
 
 
 	\section{Napredna funkcionalnost}
+	Razni zadatci mogu biti specifičnog oblika. Komponente koje smo iznad obradili su samo osnovni gradivni blokovi - oni se u praksi mogu modificirati. Primjer modifikacije okruženja zadatak je specijalizacija za tip zadataka. Trenutno postoje sljedeće specijalizacije zadataka:
 	
+	\begin{itemize}
+		\item zadatak na zaokruživanje
+		\item zadatak na nadopunjavanje
+		\item zadatak sa crtanjem
+	\end{itemize}
+
+	\subsection{Zadatci na zaokruživanje}
+	Zadatci na zaokruživanje su svi zadatci gdje je primarni način stjecanja bodova odgovaranjem na pitanja odabirom jednog ili više ponuđenih odgovora. Ponuda odgovora stvara se korištenjem okruženja \texttt{zaokruzivanje}. \textbf{Za one koji žele znati više}: to okruženje je samo preimenovano \texttt{enumitem} okruženje.
+	
+	Ovakvi zadatci obično imaju negativne bodove u omjeru od $\frac{1}{n-1}$ bodova za točan odgovor. Na primjer, ako točan odgovor nosi $4$ bodova, a ponuđeno je $5$ odgovora, onda je uobičajeno da netočan odgovor nosi $-1$ bod ($\frac{1}{5-1} \cdot 4 = \frac{1}{4} \cdot 4 = 1$), čime je očekivani broj bodova za nasumičan odabir $0$ bodova. Bodovi predani kao argumenti se odnose na cijeli zadatak, ili na pojedinačne odgovore ako se radi o više mogućih odgovora. Kompleksniji slučajevi bodovanja trebaju biti obrazloženi komentarom. \\
+	
+	Ponuđeni odgovori mogu se ponuditi korištenjem naredbe \texttt{ponuda} unutar \\ 
+	\texttt{zaokruzivanje} okruženja. Ona ima jedan obavezan argument, sadržaj ponuđenog odgovora, te zvjezdicu, neobavezni argument. Ukoliko se pozove ponuda sa zvjezdicom, taj odgovor se naglašava kao točan (ili jedan od točnih). Obrazloženja ili diskusija bi trebala biti uređena kao odgovor s autorom. Odgovore koji nisu \textbf{sigurno} točni je bolje ne označavati, već dodati odgovor s špekulacijama. \\
+	
+	Prikazat ćemo relativno jednostavan primjer korištenja zadatka na zaokruživanje:
+	
+	\begin{kod}
+	\begin{zadatak}(4;1)[glupost]
+		Što je najveća glupost na svijetu?
+		
+		\begin{zaokruzivanje}
+			\ponuda{birokracija FER-a}
+			\ponuda{porezi}
+			\ponuda{mirovinski fondovi RH}
+			\ponuda*{ugrofinski jezici}
+			\ponuda{ništa od navedenog}
+		\end{zaokruzivanje}
+	
+		\komentar[Mićo]{Nemam ništa protiv ugrofinaca, naprotiv, obožavam Finkinje :)}
+	\end{zadatak}
+	\end{kod}
+
+	što nam daje
+	
+	\begin{zadatak}(4;1)[glupost]
+		Što je najveća glupost na svijetu?
+		
+		\begin{zaokruzivanje}
+			\ponuda{birokracija FER-a}
+			\ponuda{porezi}
+			\ponuda{mirovinski fondovi RH}
+			\ponuda*{ugrofinski jezici}
+			\ponuda{ništa od navedenog}
+		\end{zaokruzivanje}
+		
+		\komentar[Mićo]{Nemam ništa protiv ugrofinaca, naprotiv, obožavam Finkinje :)}
+	\end{zadatak}
+
+	\subsection{Zadatci na nadopunjavanje}
+	Ovi zadatci nisu ništa previše posebno - radi se o nadopunjavanju sadržaja. Nadopunjavanje sadržaja radi se na 2 načina direktno - naredbom \texttt{nadopuna} ili ručnim ostavljanjem markera kod komponente koje učitavaju unos verbatim (npr. minted tj. \texttt{kod} okruženje). Naredba \texttt{nadopuna} ima jedan neobavezni argument u zagradama - duljinu elementa na koji se stavlja odgovor. Zadana vrijednost je u točkama: \textbf{\nadopunawidth}. \\
+	
+	Kratak primjer korištenja:
+	
+	\begin{kod}
+	\begin{zadatak}
+		U nastavku nalaze se citati u kojima nedostaje jedna riječ ili fraza: nadopunite sve praznine. \\
+		
+		Take a \nadopuna(40pt) on me \\
+		Mamma mia, \nadopuna(120pt) \\
+		I'm not the man they think I am at home, oh no, no, no, I'm a rocket \nadopuna
+	\end{zadatak}
+	\end{kod}
+
+	daje
+	
+	\begin{zadatak}
+		U nastavku nalaze se citati u kojima nedostaje jedna riječ ili fraza: nadopunite sve praznine. \\
+		
+		Take a \nadopuna(40pt) on me \\
+		Mamma mia, \nadopuna(120pt) \\
+		I'm not the man they think I am at home, oh no, no, no, I'm a rocket \nadopuna
+	\end{zadatak}
+	\vspace*{20pt}
+	
+	Duljinu prostora za nadopunjavanje moguće je regulirati i s drugim LaTeX duljinama - npr. \textit{in}, \textit{em}, \textit{cm} itd., kako god vam je lakše. Dobra praksa je koristiti višekratnike \textit{50pt}. Na primjer,
+	
+	\begin{kod}
+	One, \nadopuna(50 pt) one guns, \nadopuna(100 pt) arms, \\
+	\nadopuna(150 pt).
+	\end{kod}
+
+	će iscrtati \\
+	
+	One, \nadopuna(50 pt) one guns, \nadopuna(100 pt) arms, \\
+	\nadopuna(150 pt).
+	\vspace*{20pt}
+	
+	Treba primijetiti da smo radi posljednjeg prostora za nadopunu otvorili novu liniju radi urednosti. U praksi se mjesto za nadopunjavanje može podesiti da stane taman u redak. U praksi, zadatci na nadopunjavanje ne bi trebali očekivati preduge nadopune, pa ovo i nije toliki problem.
+	
+	\subsection{Zadatci s crtanjem}
 	
 \end{document}
