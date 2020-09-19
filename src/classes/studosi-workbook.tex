@@ -49,6 +49,7 @@
     funkcionalnost, bit će pokazana u ovom dokumentu.
 
 
+
     \chapter{Korištenje}\label{ch:koristenje}
     U ovom poglavlju obradit ćemo sve stavke korištenja ove klase dokumenta \\
     (\texttt{studosi-workbook}). Ovaj dokument ne pokriva apsolutno sve što je potrebno
@@ -131,6 +132,7 @@
     \vspace*{20pt}
     
     Ovako nešto je korisno za zadatke studenata ili općenito: zadatke koji nisu iz nekog ispita.
+    
     
     \section{Dodavanje komentara}
     Komentari se lako mogu dodati uz naredbu \texttt{komentar}. Naredba ima 2 argumenta: sadržaj komentara, koji je obavezan argument, te ime autora, neobavezan argument. Ime autora može biti korisničko ime na forumu ili pravo ime, što god autor više preferira. Primjer jednog takvog komentara je sljedeće:
@@ -221,26 +223,136 @@
 	\begin{odgovor}
 		Ovaj odgovor je anoniman!
 	\end{odgovor}
-
-	\vspace*{15pt}
+	\vspace{15pt}
 
 
 	\section{Napredna funkcionalnost}
 	Razni zadatci mogu biti specifičnog oblika. Komponente koje smo iznad obradili su samo osnovni gradivni blokovi - oni se u praksi mogu modificirati. Primjer modifikacije okruženja zadatak je specijalizacija za tip zadataka. Trenutno postoje sljedeće specijalizacije zadataka:
 	
 	\begin{itemize}
+		\item podzadatak
+		\item pododgovor
 		\item zadatak na zaokruživanje
 		\item zadatak na nadopunjavanje
-		\item zadatak sa crtanjem
 	\end{itemize}
 
+	\subsection{Podzadatci}
+	Podzadatci su dekoracije na postojeće zadatke. Vrlo su slični zadatcima na zaokruživanje, ali za razliku od njih različiti artikl je pitanje, a ne odgovor. Također, podzadatci imaju pododgovore kao parnu komponentu. No, kao što je već spomenuto, one su samo dekoracije, nisu previše funkcionalne. \\
+	
+	Podzadatci se stvaraju otvaranjem okruženja \texttt{podzadatci} i pozivanjem naredbe \texttt{podzadatak}. Okruženje \texttt{podzadatci} prima jedan neobavezni argument u uglatim zagradama - format indeksiranja za \texttt{enumerate} okruženje. Zadano ponašanje je da se po podzadatcima enumerira s malim slovima latinice. Naredba podzadatak prima jedan obavezni argument(sadržaj) i jedan neobavezni argument u zagradama - listu bodova. Način predavanja je gotovo isti kao i kod normalnog zadatka: sadržaj se predaje u vitičastim zagradama, a bodovi su do 3 argumenta odvojena točkom-zarez u zagradama. Ako taj argument nije predan, neće se ništa ispisati. Primjer toga je sljedeće:
+
+	\begin{kod}
+	\begin{zadatak}
+		Odgovorite na sljedeća pitanja:
+		
+		\begin{podzadatci}
+			\podzadatak{Hipotetski podzadatak}
+			\podzadatak{Podzadatak 1}(1)
+			\podzadatak{Podzadatak 2}(4;1)
+			\podzadatak{Redundantno pitanje}(1;0;1)
+		\end{podzadatci}
+	\end{zadatak}
+	\end{kod}
+
+	što će dati
+	
+	\begin{zadatak}
+		Odgovorite na sljedeća pitanja:
+		
+		\begin{podzadatci}
+			\podzadatak{Hipotetski podzadatak}
+			\podzadatak{Podzadatak 1}(1)
+			\podzadatak{Podzadatak 2}(4;1)
+			\podzadatak{Redundantno pitanje}(1;0;1)
+		\end{podzadatci}
+	\end{zadatak}
+	\vspace{10pt}
+	
+	Kad bi, recimo, htjeli listati po podzadatcima (ili nečemu srodnom) po arapskim brojevima, sve što trebamo napraviti je predati neki brojač (\textit{counter}):
+	
+	\begin{kod}
+	\begin{zadatak}
+		Odgovorite na sljedeća pitanja:
+		
+		\begin{podzadatci}[\arabic*)]
+			\podzadatak{Podzadatak 1}
+			\podzadatak{Podzadatak 2}
+		\end{podzadatci}
+	\end{zadatak}
+	\end{kod}
+
+	što daje
+	
+	\begin{zadatak}
+		Odgovorite na sljedeća pitanja:
+		
+		\begin{podzadatci}[\arabic*)]
+			\podzadatak{Podzadatak 1}
+			\podzadatak{Podzadatak 2}
+		\end{podzadatci}
+	\end{zadatak}
+
+	\subsection{Pododgovori}
+	Slično kao i kod podzadataka, moguće je odgovarati odvojeno na te podzadatke. Korištenje je gotovo identično - koristi se \texttt{pododgovori} okruženje s jednim neobaveznim argumentom, isto format indeksiranja koji ima zadano ponašanje indeksirati po malim slovima latinice. Međutim, za razliku od naredbe \texttt{podzadatak}, naredba \texttt{pododgovor} umjesto bodova prima neobavezni argument u uglatim zagradama - posebni index. S obzirom na to da nije obavezno pružiti odgovor za svako podpitanje, onda se korisniku ostavlja mogućnost ručnog postavljanja indeksa odgovora. Recimo da postoje podpitanja a, b, c i d, a da korisnik pruža odgovor samo na pitanja a i d. To možemo ostvariti s
+	
+	\begin{kod}
+	\begin{odgovor}
+		Odgovori su:
+		
+		\begin{pododgovori}
+			\pododgovor[a)]{Odgovor na 1. podpitanje}
+			\pododgovor[d)]{Odgovor na 4. podpitanje}
+		\end{pododgovori}
+		
+		\komentar[Neki lik]{Nemam pojma b) i c) LOL}
+	\end{odgovor}
+	\end{kod}
+
+	čime dobivamo
+	
+	\begin{odgovor}
+		Odgovori su:
+		
+		\begin{pododgovori}
+			\pododgovor[a)]{Odgovor na 1. podpitanje}
+			\pododgovor[d)]{Odgovor na 4. podpitanje}
+		\end{pododgovori}
+		
+		\komentar[Neki lik]{Nemam pojma b) i c) LOL}
+	\end{odgovor}
+	\vspace*{10pt}
+
+	Treba primijetiti da će ovo poremetiti iteraciju po listi, pa kombinacije ručnog specificiranja indeksa sa podrazumijevanim nisu preporučene:
+	
+	\begin{kod}
+	\begin{odgovor}
+		Odgovori su:
+		
+		\begin{pododgovori}
+			\pododgovor[b)]{Odgovaram samo na \textbf{b)} jer sam the \textbf{b}est}
+			\pododgovor{A inače se volim i igrati s vatrom}
+		\end{pododgovori}
+	\end{odgovor}
+	\end{kod}
+	
+	čime dobivamo
+	
+	\begin{odgovor}
+		Odgovori su:
+		
+		\begin{pododgovori}
+			\pododgovor[b)]{Odgovaram samo na \textbf{b)} jer sam the \textbf{b}est}
+			\pododgovor{A inače se volim i igrati s vatrom}
+		\end{pododgovori}
+	\end{odgovor}
+	
 	\subsection{Zadatci na zaokruživanje}
-	Zadatci na zaokruživanje su svi zadatci gdje je primarni način stjecanja bodova odgovaranjem na pitanja odabirom jednog ili više ponuđenih odgovora. Ponuda odgovora stvara se korištenjem okruženja \texttt{zaokruzivanje}. \textbf{Za one koji žele znati više}: to okruženje je samo preimenovano \texttt{enumitem} okruženje.
+	Zadatci na zaokruživanje su svi zadatci gdje je primarni način stjecanja bodova odgovaranjem na pitanja odabirom jednog ili više ponuđenih odgovora. Ponuda odgovora stvara se korištenjem okruženja \texttt{zaokruzivanje}. \textbf{Za one koji žele znati više}: to okruženje je samo preimenovano \texttt{enumitem} okruženje. \\
 	
 	Ovakvi zadatci obično imaju negativne bodove u omjeru od $\frac{1}{n-1}$ bodova za točan odgovor. Na primjer, ako točan odgovor nosi $4$ bodova, a ponuđeno je $5$ odgovora, onda je uobičajeno da netočan odgovor nosi $-1$ bod ($\frac{1}{5-1} \cdot 4 = \frac{1}{4} \cdot 4 = 1$), čime je očekivani broj bodova za nasumičan odabir $0$ bodova. Bodovi predani kao argumenti se odnose na cijeli zadatak, ili na pojedinačne odgovore ako se radi o više mogućih odgovora. Kompleksniji slučajevi bodovanja trebaju biti obrazloženi komentarom. \\
 	
 	Ponuđeni odgovori mogu se ponuditi korištenjem naredbe \texttt{ponuda} unutar \\ 
-	\texttt{zaokruzivanje} okruženja. Ona ima jedan obavezan argument, sadržaj ponuđenog odgovora, te zvjezdicu, neobavezni argument. Ukoliko se pozove ponuda sa zvjezdicom, taj odgovor se naglašava kao točan (ili jedan od točnih). Obrazloženja ili diskusija bi trebala biti uređena kao odgovor s autorom. Odgovore koji nisu \textbf{sigurno} točni je bolje ne označavati, već dodati odgovor s špekulacijama. \\
+	\texttt{zaokruzivanje} okruženja. Okruženje \texttt{zaokruzivanje} ima jedan neobavezni argument u uglatim zagradama - format indeksa ponuđenih odgovora, slično kao i kod podzadataka. Zadani format toga su mala latinična slova. Naredba \texttt{ponuda} ima jedan obavezan argument, sadržaj ponuđenog odgovora, te zvjezdicu, neobavezni argument. Ukoliko se pozove ponuda sa zvjezdicom, taj odgovor se naglašava kao točan (ili jedan od točnih). Obrazloženja ili diskusija bi trebala biti uređena kao odgovor s autorom. Odgovore koji nisu \textbf{sigurno} točni je bolje ne označavati, već dodati odgovor s špekulacijama. \\
 	
 	Prikazat ćemo relativno jednostavan primjer korištenja zadatka na zaokruživanje:
 	
@@ -317,6 +429,28 @@
 	
 	Treba primijetiti da smo radi posljednjeg prostora za nadopunu otvorili novu liniju radi urednosti. U praksi se mjesto za nadopunjavanje može podesiti da stane taman u redak. U praksi, zadatci na nadopunjavanje ne bi trebali očekivati preduge nadopune, pa ovo i nije toliki problem.
 	
-	\subsection{Zadatci s crtanjem}
+	
+	
+	\chapter{Dodatno}
+	Ovaj predložak nudi praćenje 2 dodatne komponente osim strukture dokumenta - ključnih riječi i kontributora. Također, na početku dokumenta ispisat će se i licenca.
+	
+	
+	\section{Dodatni sadržaji i popisi}
+	Ključne riječi pozicionirane su na kraju dokumenta poredane abecednim poretkom. Razlog za ovo je dvojak:
+	
+	\begin{itemize}
+		\item potencijalno dugačak sadržaj ključnih riječi
+		\item korisnik jednostavno izbaci ovaj sadržaj ako ga ne želi printati
+	\end{itemize}
+
+	Ključne riječi automatski se pamte prilikom dodavanja ključnih riječi u zadatku. Dakle, korisnik ne mora apsolutno ništa raditi osim definirati ključne riječi. Ključne riječi povezane su sa stranicama na kojim se nalaze, a te stranice su ujedno i poveznice do sadržaja te služe za navigaciju u nekom pregledniku. Par pravila kod ključnih riječi - ključne riječi su isključivo pisane malim slovima. Konflikti će se riješavati posebno, no do njih ne bi trebalo dolaziti. \\
+
+	Nakon sadržaja ključnih riječi nalazi se popis kontributora. Popis kontributora puni se na sličan način kao i ključne riječi, no za razliku od stranica ključnih riječi, ovdje nema stranica na kojima se dogodila kontribucija. Kontributori su također sortirano abecedno i ne vrši se diskriminacija po kontribuciji - kontribucija može biti i opširan odgovor, i jednostavan komentar. Lista kontributora ne služi za mjerenje kurca, već za pružanje prava u odlučivanju što je korištenje materijala za dobro, a što za zlo, sukladno \textbf{\textcolor{tagcolor}{Studoši licencama}}. Ime kontributora može biti ime i prezime (najbolje), korisničko ime na \texttt{studosi.net} (drugo najbolje) ili nadimak na \texttt{studosi.net} (nije preporučeno). Neke druge forme identifikacije su npr. JMBAG i e-mail. Međutim treba primijetiti da ni jedno ni drugo nije previše korisno - JMBAG prestaje biti koristan nakon kraja studija, a e-mailove je moguće napustiti i ignorirati, a ne govore previše o identitetu osobe. Tri navedene opcije za identifikacije imaju najviše smisla jer su ili stalne, ili povezane uz nečije djelovanje u zajednici. \\
+	
+	Primjer obje ove komponente možete vidjeti na kraju ovog dokumenta, s obzirom na to da je ovaj dokument pisan s predloškom za zbrike zadataka.
+	
+	
+	\section{Licenca}
+	Licenca će se nalaziti na početku dokumenta, nakon sadržaja. Ona će se povlačiti iz zasebne datoteke koja će biti ažurirana prilikom ažuriranja licence i automatski će se dodavati prilikom korištenja predloška. Korisnik ovdje ne mora ništa činiti jer će predložak već sam u sebi imati automatski definirano koju licencu koristiti i kako je formatirati. \textbf{Ova licenca ne smije se ni u kojem slučaju micati iz sadržaja datoteke.} Ako printate datoteku i frka vam je tih 20 ili koliko već lipa, rađe maknite sadržaj ključnih riječi ili popis kontributora iz dokumenta, uštedit ćete puno više.
 	
 \end{document}

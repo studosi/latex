@@ -118,18 +118,18 @@
 % For anyone wondering why this is implemented in such a braindead way:
 % alignment gets all fucky if I try to simulate a stack program.
 \NewDocumentCommand{\recordpoints}{m m m}{%
-    \IfNoValueTF{#3}{
-        \IfNoValueTF{#2}{
+    \IfNoValueTF{#3}{%
+        \IfNoValueTF{#2}{%
             \IfNoValueTF{#1}{}{%
-                (\textcolor{studosicolor}{#1})
+                (\textcolor{studosicolor}{#1})%
             }
         }{%
-            (\textcolor{studosicolor}{#1} \hspace{0.1cm}
-             \textcolor{antistudosicolor}{#2})
+            (\textcolor{studosicolor}{#1} \hspace{0.1cm}%
+            \textcolor{antistudosicolor}{#2})
         }
     }{%
-        (\textcolor{studosicolor}{#1} \hspace{0.2cm}
-         \textcolor{gray}{#2} \hspace{0.2cm}
+        (\textcolor{studosicolor}{#1} \hspace{0.2cm}%
+         \textcolor{gray}{#2} \hspace{0.2cm}%
          \textcolor{antistudosicolor}{#3})
     }
 }
@@ -167,13 +167,41 @@
     \vspace*{10 pt}
 }
 
+\NewDocumentEnvironment{podzadatci}{d[]}{%
+	\begin{enumerate}[label=\IfNoValueTF{#1}{\alph*)}{#1}]
+}{%
+	\end{enumerate}
+}
+
+\NewDocumentCommand{\podzadatak}{m >{\SplitArgument{2}{;}}d()}{%
+	\item{%
+		#1 \IfNoValueTF{#2}{}{%
+			\hspace{\fill} \mbox{\footnotesize{\textbf{\recordpoints #2}}}
+		}
+	}
+}
+
+\NewDocumentEnvironment{pododgovori}{d[]}{%
+	\begin{enumerate}[label=\IfNoValueTF{#1}{\alph*)}{#1}]
+	}{%
+	\end{enumerate}
+}
+
+\NewDocumentCommand{\pododgovor}{d[] m}{%
+	\IfNoValueTF{#1}{%
+		\item{#2}
+	}{%
+		\item[#1]{#2}
+	}
+}
+
 \NewDocumentCommand{\ponuda}{s m}{%
 	\item{\IfBooleanTF{#1}{\textbf{#2}}{#2}}
 }
 
 % Arguments are not parsed because zadatak parses them!
-\NewDocumentEnvironment{zaokruzivanje}{d() d[]}{%
-	\begin{enumerate}[label=\alph*), itemsep=0 pt]
+\NewDocumentEnvironment{zaokruzivanje}{d[]}{%
+	\begin{enumerate}[label=\IfNoValueTF{#1}{\alph*)}{#1}, itemsep=0 pt]
 }{%
 	\end{enumerate}
 }
